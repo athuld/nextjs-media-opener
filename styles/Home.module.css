@@ -163,9 +163,10 @@
   }
 
   .img {
-    width: 16px;
+    width: 17px;
   }
   .player {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+    padding: 0.8em 0.95em;
   }
 }
