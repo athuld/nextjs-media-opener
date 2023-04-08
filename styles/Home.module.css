@@ -32,6 +32,7 @@
 
 .centre_card > img {
   width: 20vw;
+  height: auto;
 }
 
 .title {
@@ -133,6 +134,7 @@
 
 .img {
   width: 20px;
+  height: auto;
 }
 
 @media only screen and (max-width: 600px) {

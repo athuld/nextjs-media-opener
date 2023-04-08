@@ -1,6 +1,10 @@
 import Head from "next/head";
 import styles from "@/styles/Home.module.css";
 import { GetServerSidePropsContext } from "next";
+import Image from "next/image"
+import AloneImg from "../public/Alone_Meme.jpg"
+import VLCImg from "../public/VLC_Icon.png"
+import MPVImg from "../public/MPV_Icon.png"
 
 export default function Home({ isMobile, data, streamLinks }: any) {
   let deviceType = isMobile ? "mobile" : "desktop";
@@ -48,7 +52,7 @@ export default function Home({ isMobile, data, streamLinks }: any) {
           {Object.keys(data).length === 0 ? (
             <div className={styles.centre_card}>
               <p className={styles.title}>No Files To Stream :(</p>
-              <img src="/Alone_Meme.jpg" alt="Alone" />
+              <Image src={AloneImg} alt="Alone" />
             </div>
           ) : (
             <>
@@ -95,7 +99,7 @@ export default function Home({ isMobile, data, streamLinks }: any) {
                 {streamLinks[deviceType].map((link: any, index: number) => {
                   return (
                     <a key={index} href={link.link} className={link.class}>
-                      <img src={link.img} className={styles.img} alt="player" />
+                      <Image src={link.img} className={styles.img} alt="player" />
                       <span>{link.app}</span>
                     </a>
                   );
@@ -122,13 +126,13 @@ async function getStreamLinks(data: any) {
       {
         app: "Vlc Mobile",
         link: VLC_STREAM,
-        img: "/VLC_Icon.png",
+        img: VLCImg,
         class: `${styles.player} ${styles.vlc}`,
       },
       {
         app: "Mpv Mobile",
         link: MPV_MOBILE,
-        img: "/MPV_Icon.png",
+        img: MPVImg,
         class: `${styles.player} ${styles.mpv}`,
       },
     ],
@@ -136,13 +140,13 @@ async function getStreamLinks(data: any) {
       {
         app: "Mpv Desktop",
         link: MPV_DESKTOP,
-        img: "/MPV_Icon.png",
+        img: MPVImg,
         class: `${styles.player} ${styles.mpv}`,
       },
       {
         app: "Vlc Desktop",
         link: VLC_STREAM,
-        img: "/VLC_Icon.png",
+        img: VLCImg,
         class: `${styles.player} ${styles.vlc}`,
       },
     ],
