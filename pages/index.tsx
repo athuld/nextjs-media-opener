@@ -5,6 +5,8 @@ import Image from "next/image"
 import AloneImg from "../public/Alone_Meme.jpg"
 import VLCImg from "../public/VLC_Icon.png"
 import MPVImg from "../public/MPV_Icon.png"
+import CopyIcon from "../public/copy.svg"
+import DownloadIcon from "../public/download.svg"
 
 export default function Home({ isMobile, data, streamLinks }: any) {
   let deviceType = isMobile ? "mobile" : "desktop";
@@ -70,11 +72,7 @@ export default function Home({ isMobile, data, streamLinks }: any) {
                   className={styles.action_btn}
                   onClick={handleClick}
                 >
-                  <span
-                    className={"material-symbols-rounded " + styles.copy_icon}
-                  >
-                    content_copy
-                  </span>
+                <Image src={CopyIcon} className={styles.svg_btn} alt="Copy" />
                   {!isMobile ? (
                     <span
                       id="copy_icon_text"
@@ -89,7 +87,7 @@ export default function Home({ isMobile, data, streamLinks }: any) {
                   className={styles.action_btn}
                   href={data.download_link}
                 >
-                  <span className="material-symbols-rounded ">download</span>
+                  <Image src={DownloadIcon} className={styles.svg_btn} alt="Download" />
                   {!isMobile ? (
                     <span className={styles.action_btn_text}>Download</span>
                   ) : null}

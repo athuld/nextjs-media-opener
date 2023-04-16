@@ -5,15 +5,27 @@
   top: 1em;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #67bb63;
+  background-color: #303030;
   padding: 0.5em 3em;
   border-radius: 0.5em;
   cursor: pointer;
+  text-align: center;
+}
+
+.alert:before {
+  content: "";
+  width: 0.5em;
+  height: 100%;
+  top: 0;
+  left: 0;
+  border-radius: 0.5em;
+  position: absolute;
+  background-color: #67bb63;
 }
 
 .card {
   background-color: #303030;
-  min-width: 50vw;
+  min-width: 55vw;
   max-width: 60vw;
   min-height: 55vh;
   max-height: 75vh;
@@ -22,7 +34,7 @@
   word-break: break-all;
 }
 
-.card >p {
+.card > p {
   text-align: center;
 }
 
@@ -70,8 +82,9 @@
   display: flex;
   justify-content: center;
   text-decoration: none;
-  color: white;
+  color: #fff;
   gap: 0.5em;
+  border: 2px solid #121313;
   background-color: #121313;
   padding: 0.5em;
   border-radius: 0.5em;
@@ -79,27 +92,20 @@
 }
 
 .action_btn:hover {
-  color: #121313;
-  background-color: white;
+  border: 2px solid white;
 }
 
 .copy_btn {
+  border: 2px solid #67bb63;
   background-color: #67bb63;
   color: white;
   background-position: center;
   transition: background 0.5s;
 }
 
-.copy_btn:hover {
-  background: #40863c radial-gradient(circle, transparent 1%, #40863c 1%)
-    center/15000%;
-  color: #303030;
-}
-.copy_btn:active {
-  background-color: #67bb63;
-  color: white;
-  background-size: 100%;
-  transition: background 0s;
+.svg_btn {
+  width: 1.55em;
+  height: auto;
 }
 
 .stream_section {
@@ -114,7 +120,6 @@
   justify-content: center;
   align-items: center;
   gap: 0.5em;
-  background-color: white;
   color: #121313;
   padding: 0.6em 0.8em;
   margin-top: 3rem;
@@ -132,8 +137,12 @@
   background-color: #fcbc7c;
 }
 
-.player:hover {
-  background-color: white;
+.mpv:hover {
+  background-color: #cb9bdf;
+}
+
+.vlc:hover {
+  background-color: #eea760;
 }
 
 .img {
@@ -144,6 +153,7 @@
 @media only screen and (max-width: 600px) {
   .alert {
     padding: 0.5em 1em;
+    width: 50%;
     font-size: 0.8rem;
   }
 
@@ -172,5 +182,8 @@
   .player {
     font-size: 0.8rem;
     padding: 0.8em 0.95em;
+  }
+  .svg_btn {
+    width: 3.5rem;
   }
 }
