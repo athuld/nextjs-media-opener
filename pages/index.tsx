@@ -112,7 +112,7 @@ export default function Home({ isMobile, data, streamLinks }: any) {
 }
 
 async function getStreamLinks(data: any) {
-  const stream_link: string = data.stream_link;
+  const stream_link: string = data.download_link;
   let VLC_STREAM = "vlc://" + stream_link;
   let MPV_MOBILE =
     stream_link.replace("http", "intent") +
