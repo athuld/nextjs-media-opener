@@ -8,11 +8,12 @@
   background-color: #303030;
   padding: 0.5em 3em;
   border-radius: 0.5em;
+  min-width: 15rem;
   cursor: pointer;
   text-align: center;
 }
 
-.alert:before {
+.copy_alert:before {
   content: "";
   width: 0.5em;
   height: 100%;
@@ -21,6 +22,17 @@
   border-radius: 0.5em;
   position: absolute;
   background-color: #67bb63;
+}
+
+.error_alert:before{
+  content: "";
+  width: 0.5em;
+  height: 100%;
+  top: 0;
+  left: 0;
+  border-radius: 0.5em;
+  position: absolute;
+  background-color: #ff5257;
 }
 
 .card {
@@ -32,6 +44,7 @@
   border-radius: 0.5em;
   padding: 2.5em 1.5em;
   word-break: break-all;
+  margin-top: 1rem;
 }
 
 .card > p {
@@ -89,18 +102,27 @@
   padding: 0.5em;
   border-radius: 0.5em;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .action_btn:hover {
   border: 2px solid white;
 }
 
+.interactive_section {
+  display: flex;
+  justify-content: space-between;
+  margin: 2em 2em 0 2em;
+
+}
+
+
 .copy_btn {
   border: 2px solid #67bb63;
   background-color: #67bb63;
   color: white;
   background-position: center;
-  transition: background 0.5s;
+  transition: background 0.5s ease;
 }
 
 .svg_btn {
@@ -127,6 +149,7 @@
   text-decoration: none;
   font-weight: 500;
   color: #303030;
+  transition: all 0.3s ease;
 }
 
 .mpv {
@@ -148,6 +171,27 @@
 .img {
   width: 20px;
   height: auto;
+}
+.interactive_btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.7em 1em;
+    min-width: 8rem;
+    background-color: white;
+    border: none;
+    color: #121313;
+    transition: all 0.3s ease;
+}
+
+.interactive_btn:hover {
+    border: none;
+    background-color: #bbf0fc
+}
+
+.arrow_btn{
+    width: 1.5rem;
+    height: auto;
 }
 
 @media only screen and (max-width: 600px) {
@@ -185,5 +229,12 @@
   }
   .svg_btn {
     width: 3.5rem;
+  }
+
+.interactive_btn{
+    min-width: 5rem;
+}
+  .arrow_btn{
+      width: 1.2em;
   }
 }
