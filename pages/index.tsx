@@ -14,25 +14,33 @@ import React, { useState } from "react";
 export default function Home({ isMobile, data, streamLinks }: any) {
   let deviceType = isMobile ? "mobile" : "desktop";
   const [stData, setStData] = useState(data);
-  const [stLinks, setStLinks] = useState(streamLinks)
+  const [stLinks, setStLinks] = useState(streamLinks);
 
-  const handleClick = () => {
+  const showNotification = (message: string, btnClass: string) => {
+    let alert = document.getElementById("alert");
+    alert != null ? (alert.innerText = message) : null;
+    alert?.classList.add(btnClass);
+    alert?.classList.add(styles.alert);
+    setTimeout(() => {
+      alert?.classList.remove(styles.alert);
+      alert?.classList.remove(styles.error_alert);
+    }, 4000);
+  };
+
+  const handleCopyClick = () => {
     let text = data.download_link;
     let copyBtn = document.getElementById("copy_btn");
     let copyText = document.getElementById("copy_icon_text");
-    let alert = document.getElementById("alert");
     try {
       navigator.clipboard.writeText(text);
       copyText != null ? (copyText.innerText = "Copied") : null;
       copyBtn?.classList.add(styles.copy_btn);
-      alert?.classList.add(styles.alert);
-      setTimeout(() => {
-        alert?.classList.remove(styles.alert);
-      }, 4000);
+      showNotification("Link copied to clipboard!",styles.copy_alert)
     } catch (err) {
       console.error(err);
     }
   };
+
 
   const handleAlertRemove = () => {
     let alert = document.getElementById("alert");
@@ -46,8 +54,12 @@ export default function Home({ isMobile, data, streamLinks }: any) {
         `${process.env.NEXT_PUBLIC_API_URL}/file?hash=${stData.hash}&ip_address=${ipAddress}&action=${action}`
       );
       const resData = await res.json();
-      setStData(resData)
-      setStLinks(await getStreamLinks(resData))
+      if (Object.keys(resData).length != 0){
+      setStData(resData);
+      setStLinks(await getStreamLinks(resData));
+      } else {
+       showNotification(`Sorry there is no more ${action} link!`,styles.error_alert)
+      }
     } catch (err) {
       console.log("Error fetching data" + err);
     }
@@ -77,7 +89,6 @@ export default function Home({ isMobile, data, streamLinks }: any) {
           onClick={handleAlertRemove}
           style={{ display: "none" }}
         >
-          Copied to clipboard
         </span>
         <div className={styles.card}>
           {Object.keys(stData).length === 0 ? (
@@ -99,7 +110,7 @@ export default function Home({ isMobile, data, streamLinks }: any) {
                 <a
                   id="copy_btn"
                   className={styles.action_btn}
-                  onClick={handleClick}
+                  onClick={handleCopyClick}
                 >
                   <Image src={CopyIcon} className={styles.svg_btn} alt="Copy" />
                   {!isMobile ? (
