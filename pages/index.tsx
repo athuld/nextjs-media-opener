@@ -1,15 +1,20 @@
 import Head from "next/head";
 import styles from "@/styles/Home.module.css";
 import { GetServerSidePropsContext } from "next";
-import Image from "next/image"
-import AloneImg from "../public/Alone_Meme.jpg"
-import VLCImg from "../public/VLC_Icon.png"
-import MPVImg from "../public/MPV_Icon.png"
-import CopyIcon from "../public/copy.svg"
-import DownloadIcon from "../public/download.svg"
+import Image from "next/image";
+import AloneImg from "../public/Alone_Meme.jpg";
+import VLCImg from "../public/VLC_Icon.png";
+import MPVImg from "../public/MPV_Icon.png";
+import CopyIcon from "../public/copy.svg";
+import DownloadIcon from "../public/download.svg";
+import PreviousIcon from "../public/previous.svg";
+import NextIcon from "../public/next.svg";
+import React, { useState } from "react";
 
 export default function Home({ isMobile, data, streamLinks }: any) {
   let deviceType = isMobile ? "mobile" : "desktop";
+  const [stData, setStData] = useState(data);
+  const [stLinks, setStLinks] = useState(streamLinks)
 
   const handleClick = () => {
     let text = data.download_link;
@@ -34,6 +39,30 @@ export default function Home({ isMobile, data, streamLinks }: any) {
     alert?.classList.remove(styles.alert);
   };
 
+  const getActionApiData = async (action: string) => {
+    const ipAddress = new URL(stData.stream_link).hostname;
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/file?hash=${stData.hash}&ip_address=${ipAddress}&action=${action}`
+      );
+      const resData = await res.json();
+      setStData(resData)
+      setStLinks(await getStreamLinks(resData))
+    } catch (err) {
+      console.log("Error fetching data" + err);
+    }
+  };
+
+  const handleNextAction = async (e: React.ChangeEvent<any>) => {
+    e.preventDefault();
+    await getActionApiData("next");
+  };
+
+  const handlePreviousAction = async (e: React.ChangeEvent<any>) => {
+    e.preventDefault();
+    await getActionApiData("previous");
+  };
+
   return (
     <>
       <Head>
@@ -51,19 +80,19 @@ export default function Home({ isMobile, data, streamLinks }: any) {
           Copied to clipboard
         </span>
         <div className={styles.card}>
-          {Object.keys(data).length === 0 ? (
+          {Object.keys(stData).length === 0 ? (
             <div className={styles.centre_card}>
               <p className={styles.title}>No Files To Stream :(</p>
               <Image src={AloneImg} alt="Alone" />
             </div>
           ) : (
             <>
-              <p className={styles.title}>{data.filename}</p>
+              <p className={styles.title}>{stData.filename}</p>
               <div className={styles.action_section}>
                 <input
                   type="text"
                   className={styles.copy_input}
-                  defaultValue={data.download_link}
+                  defaultValue={stData.download_link}
                   name="copy"
                   id="copy"
                 />
@@ -72,7 +101,7 @@ export default function Home({ isMobile, data, streamLinks }: any) {
                   className={styles.action_btn}
                   onClick={handleClick}
                 >
-                <Image src={CopyIcon} className={styles.svg_btn} alt="Copy" />
+                  <Image src={CopyIcon} className={styles.svg_btn} alt="Copy" />
                   {!isMobile ? (
                     <span
                       id="copy_icon_text"
@@ -85,23 +114,63 @@ export default function Home({ isMobile, data, streamLinks }: any) {
                 <a
                   target="_blank"
                   className={styles.action_btn}
-                  href={data.download_link}
+                  href={stData.download_link}
                 >
-                  <Image src={DownloadIcon} className={styles.svg_btn} alt="Download" />
+                  <Image
+                    src={DownloadIcon}
+                    className={styles.svg_btn}
+                    alt="Download"
+                  />
                   {!isMobile ? (
                     <span className={styles.action_btn_text}>Download</span>
                   ) : null}
                 </a>
               </div>
               <div className={styles.stream_section}>
-                {streamLinks[deviceType].map((link: any, index: number) => {
+                {stLinks[deviceType]?.map((link: any, index: number) => {
                   return (
                     <a key={index} href={link.link} className={link.class}>
-                      <Image src={link.img} className={styles.img} alt="player" />
+                      <Image
+                        src={link.img}
+                        className={styles.img}
+                        alt="player"
+                      />
                       <span>{link.app}</span>
                     </a>
                   );
                 })}
+              </div>
+              <div className={styles.interactive_section}>
+                <a
+                  onClick={handlePreviousAction}
+                  href=""
+                  className={`${styles.action_btn} ${styles.interactive_btn}`}
+                  target="_blank"
+                >
+                  <Image
+                    className={styles.arrow_btn}
+                    src={PreviousIcon}
+                    alt="Previous"
+                  />
+                  {!isMobile ? (
+                    <span className={styles.action_btn_text}>Previous</span>
+                  ) : null}
+                </a>
+                <a
+                  href=""
+                  onClick={handleNextAction}
+                  className={`${styles.action_btn} ${styles.interactive_btn}`}
+                  target="_blank"
+                >
+                  {!isMobile ? (
+                    <span className={styles.action_btn_text}>Next</span>
+                  ) : null}
+                  <Image
+                    className={styles.arrow_btn}
+                    src={NextIcon}
+                    alt="Next"
+                  />
+                </a>
               </div>
             </>
           )}
