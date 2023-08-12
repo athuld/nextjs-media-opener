@@ -229,6 +229,7 @@
   }
   .svg_btn {
     width: 3.5rem;
+    height: auto;
   }
 
 .interactive_btn{

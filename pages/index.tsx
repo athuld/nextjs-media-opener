@@ -10,6 +10,7 @@ import DownloadIcon from "../public/download.svg";
 import PreviousIcon from "../public/previous.svg";
 import NextIcon from "../public/next.svg";
 import React, { useState } from "react";
+import fileDownload from "js-file-download";
 
 export default function Home({ isMobile, data, streamLinks }: any) {
   let deviceType = isMobile ? "mobile" : "desktop";
@@ -51,7 +52,7 @@ export default function Home({ isMobile, data, streamLinks }: any) {
     const ipAddress = new URL(stData.stream_link).hostname;
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/file?hash=${stData.hash}&ip_address=${ipAddress}&action=${action}`
+        `/api/action/?hash=${stData.hash}&ip_address=${ipAddress}&action=${action}`
       );
       const resData = await res.json();
       if (Object.keys(resData).length != 0){
@@ -123,9 +124,8 @@ export default function Home({ isMobile, data, streamLinks }: any) {
                   ) : null}
                 </a>
                 <a
-                  target="_blank"
                   className={styles.action_btn}
-                  href={stData.download_link}
+                  onClick={()=> fileDownload(stData.download_link,stData.filename)}
                 >
                   <Image
                     src={DownloadIcon}
