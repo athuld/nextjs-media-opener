@@ -10,7 +10,6 @@ import DownloadIcon from "../public/download.svg";
 import PreviousIcon from "../public/previous.svg";
 import NextIcon from "../public/next.svg";
 import React, { useState } from "react";
-import fileDownload from "js-file-download";
 
 export default function Home({ isMobile, data, streamLinks }: any) {
   let deviceType = isMobile ? "mobile" : "desktop";
@@ -125,7 +124,9 @@ export default function Home({ isMobile, data, streamLinks }: any) {
                 </a>
                 <a
                   className={styles.action_btn}
-                  onClick={()=> fileDownload(stData.download_link,stData.filename)}
+                  target="_blank"
+                  href={stData.download_link}
+                  download={stData.filename}
                 >
                   <Image
                     src={DownloadIcon}
