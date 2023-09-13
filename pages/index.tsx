@@ -28,7 +28,7 @@ export default function Home({ isMobile, data, streamLinks }: any) {
   };
 
   const handleCopyClick = () => {
-    let text = data.download_link;
+    let text = data.cloudflare_link;
     let copyBtn = document.getElementById("copy_btn");
     let copyText = document.getElementById("copy_icon_text");
     try {
@@ -36,6 +36,10 @@ export default function Home({ isMobile, data, streamLinks }: any) {
       copyText != null ? (copyText.innerText = "Copied") : null;
       copyBtn?.classList.add(styles.copy_btn);
       showNotification("Link copied to clipboard!",styles.copy_alert)
+      setTimeout(()=>{
+        copyText != null ? (copyText.innerText = "Copy") : null;
+        copyBtn?.classList.remove(styles.copy_btn);
+      }, 4000)
     } catch (err) {
       console.error(err);
     }
@@ -103,7 +107,7 @@ export default function Home({ isMobile, data, streamLinks }: any) {
                 <input
                   type="text"
                   className={styles.copy_input}
-                  defaultValue={stData.download_link}
+                  defaultValue={stData.cloudflare_link}
                   name="copy"
                   id="copy"
                 />
@@ -261,6 +265,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     };
   }
+  data["cloudflare_link"] = `${process.env.CLOUDFLARE_LINK}/${id}`
   const streamLinks = await getStreamLinks(data);
   return {
     props: {
