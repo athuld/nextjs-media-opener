@@ -5,6 +5,7 @@ import Image from "next/image";
 import AloneImg from "../public/Alone_Meme.jpg";
 import VLCImg from "../public/VLC_Icon.png";
 import MPVImg from "../public/MPV_Icon.png";
+import MXImg from "../public/MX_Icon.png"
 import CopyIcon from "../public/copy.svg";
 import DownloadIcon from "../public/download.svg";
 import PreviousIcon from "../public/previous.svg";
@@ -213,6 +214,8 @@ async function getStreamLinks(data: any) {
   let MPV_MOBILE =
     stream_link.replace("http", "intent") +
     "#Intent;type=video/any;package=is.xyz.mpv;scheme=http;end;";
+  let encodedFileName = encodeURIComponent(data.filename)
+  let MX_PLAYER = `intent:${stream_link}#Intent;package=com.mxtech.videoplayer.ad;S.title=${encodedFileName};end`
   let encodedUrl = Buffer.from(stream_link).toString("base64");
   let MPV_DESKTOP = "mpv://" + encodedUrl;
   let streamLinks = {
@@ -228,6 +231,12 @@ async function getStreamLinks(data: any) {
         link: MPV_MOBILE,
         img: MPVImg,
         class: `${styles.player} ${styles.mpv}`,
+      },
+      {
+        app: "MX Player",
+        link: MX_PLAYER,
+        img: MXImg,
+        class: `${styles.player} ${styles.mx}`,
       },
     ],
     desktop: [
