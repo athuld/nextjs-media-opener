@@ -215,7 +215,7 @@ async function getStreamLinks(data: any) {
     stream_link.replace("http", "intent") +
     "#Intent;type=video/any;package=is.xyz.mpv;scheme=http;end;";
   let encodedFileName = encodeURIComponent(data.filename)
-  let MX_PLAYER = `intent:${stream_link}#Intent;package=com.mxtech.videoplayer.ad;S.title=${encodedFileName};end`
+  let MX_PLAYER = `intent:${data.stream_link}#Intent;package=com.mxtech.videoplayer.ad;S.title=${encodedFileName};end`
   let encodedUrl = Buffer.from(stream_link).toString("base64");
   let MPV_DESKTOP = "mpv://" + encodedUrl;
   let streamLinks = {
