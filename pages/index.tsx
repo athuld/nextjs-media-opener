@@ -5,7 +5,7 @@ import Image from "next/image";
 import AloneImg from "../public/Alone_Meme.jpg";
 import VLCImg from "../public/VLC_Icon.png";
 import MPVImg from "../public/MPV_Icon.png";
-import MXImg from "../public/MX_Icon.png"
+import MXImg from "../public/MX_Icon.png";
 import CopyIcon from "../public/copy.svg";
 import DownloadIcon from "../public/download.svg";
 import PreviousIcon from "../public/previous.svg";
@@ -16,7 +16,7 @@ export default function Home({ isMobile, data, streamLinks }: any) {
   let deviceType = isMobile ? "mobile" : "desktop";
   const [stData, setStData] = useState(data);
   const [stLinks, setStLinks] = useState(streamLinks);
-  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>()
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>();
 
   const showNotification = (message: string, btnClass: string) => {
     let alert = document.getElementById("alert");
@@ -31,11 +31,11 @@ export default function Home({ isMobile, data, streamLinks }: any) {
     alert?.classList.add(btnClass);
     alert?.classList.add(styles.alert);
     const tId = setTimeout(() => {
-      if (alert?.classList.contains(styles.alert)){
+      if (alert?.classList.contains(styles.alert)) {
         handleAlertRemove();
       }
     }, 3000);
-    setTimeoutId(tId)
+    setTimeoutId(tId);
   };
 
   const handleCopyClick = () => {
@@ -64,14 +64,13 @@ export default function Home({ isMobile, data, streamLinks }: any) {
       const res = await fetch(
         `/api/action/?hash=${stData.hash}&ip_address=${ipAddress}&action=${action}`
       );
-      clearTimeout(timeoutId)
+      clearTimeout(timeoutId);
       const resData = await res.json();
       if (Object.keys(resData).length != 0) {
         setStData(resData);
         handleAlertRemove();
         setStLinks(await getStreamLinks(resData));
       } else {
-        
         showNotification(
           `Sorry there is no more ${action} link!`,
           styles.error_alert
@@ -210,19 +209,20 @@ export default function Home({ isMobile, data, streamLinks }: any) {
 
 async function getStreamLinks(data: any) {
   const stream_link: string = data.download_link;
-  let VLC_STREAM = "vlc://" + stream_link;
+  let VLC_DESKTOP = "vlc://" + data.stream_link;
+  let encodedFileName = encodeURIComponent(data.filename);
+  let VLC_ANDROID = `intent:${data.stream_link}#Intent;package=org.videolan.vlc;S.title=${encodedFileName};end;`;
   let MPV_MOBILE =
     stream_link.replace("http", "intent") +
-    "#Intent;type=video/any;package=is.xyz.mpv;scheme=http;end;";
-  let encodedFileName = encodeURIComponent(data.filename)
-  let MX_PLAYER = `intent:${data.stream_link}#Intent;package=com.mxtech.videoplayer.ad;S.title=${encodedFileName};end`
-  let encodedUrl = Buffer.from(stream_link).toString("base64");
+    `#Intent;type=video/any;package=is.xyz.mpv;S.title=${encodedFileName};scheme=http;end;`;
+  let MX_PLAYER = `intent:${data.stream_link}#Intent;package=com.mxtech.videoplayer.ad;S.title=${encodedFileName};end;`;
+  let encodedUrl = Buffer.from(data.stream_link).toString("base64");
   let MPV_DESKTOP = "mpv://" + encodedUrl;
   let streamLinks = {
     mobile: [
       {
         app: "Vlc Mobile",
-        link: VLC_STREAM,
+        link: VLC_ANDROID,
         img: VLCImg,
         class: `${styles.player} ${styles.vlc}`,
       },
@@ -248,7 +248,7 @@ async function getStreamLinks(data: any) {
       },
       {
         app: "Vlc Desktop",
-        link: VLC_STREAM,
+        link: VLC_DESKTOP,
         img: VLCImg,
         class: `${styles.player} ${styles.vlc}`,
       },
