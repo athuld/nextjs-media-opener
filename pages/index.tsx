@@ -223,13 +223,8 @@ async function getStreamLinks(data: any) {
   let VLC_DESKTOP = "vlc://" + stream_link;
   let encodedFileName = encodeURIComponent(data.filename);
   let VLC_ANDROID = get_mob_stream(encodedFileName,"org.videolan.vlc",stream_link)
-  // let VLC_ANDROID = `intent:${stream_link}#Intent;package=org.videolan.vlc;S.title=${encodedFileName};end;`;
   let MPV_MOBILE = get_mob_stream(encodedFileName,"is.xyz.mpv",stream_link)
-  // let MPV_MOBILE =
-  //   stream_link.replace("http", "intent") +
-  //   `#Intent;type=video/any;package=is.xyz.mpv;S.title=${encodedFileName};scheme=http;end;`;
   let MX_PLAYER = get_mob_stream(encodedFileName,"com.mxtech.videoplayer.ad",stream_link)
-  // let MX_PLAYER = `intent:${stream_link}#Intent;type=video/any;package=com.mxtech.videoplayer.ad;S.title=${encodedFileName};scheme=http;end;`;
   let encodedUrl = Buffer.from(stream_link).toString("base64");
   let MPV_DESKTOP = "mpv://" + encodedUrl;
   let streamLinks = {
