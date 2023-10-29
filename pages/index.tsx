@@ -6,6 +6,7 @@ import AloneImg from "../public/Alone_Meme.jpg";
 import VLCImg from "../public/VLC_Icon.png";
 import MPVImg from "../public/MPV_Icon.png";
 import MXImg from "../public/MX_Icon.png";
+import NextImg from "../public/NEXT_Icon.png"
 import CopyIcon from "../public/copy.svg";
 import DownloadIcon from "../public/download.svg";
 import PreviousIcon from "../public/previous.svg";
@@ -225,6 +226,7 @@ async function getStreamLinks(data: any) {
   let VLC_ANDROID = get_mob_stream(encodedFileName,"org.videolan.vlc",stream_link)
   let MPV_MOBILE = get_mob_stream(encodedFileName,"is.xyz.mpv",stream_link)
   let MX_PLAYER = get_mob_stream(encodedFileName,"com.mxtech.videoplayer.ad",stream_link)
+  let NEXT_PLAYER = get_mob_stream(encodedFileName,"dev.anilbeesetti.nextplayer",stream_link)
   let encodedUrl = Buffer.from(stream_link).toString("base64");
   let MPV_DESKTOP = "mpv://" + encodedUrl;
   let streamLinks = {
@@ -246,6 +248,12 @@ async function getStreamLinks(data: any) {
         link: MX_PLAYER,
         img: MXImg,
         class: `${styles.player} ${styles.mx}`,
+      },
+      {
+        app: "Next Player",
+        link: NEXT_PLAYER,
+        img: NextImg,
+        class: `${styles.player} ${styles.next}`,
       },
     ],
     desktop: [

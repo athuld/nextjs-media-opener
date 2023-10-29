@@ -165,6 +165,15 @@
   background-color: #a0c2fc;
 }
 
+.next {
+  background-color: #1f2526;
+  color: white;
+}
+
+.next:hover {
+  background-color: #2c383a;
+}
+
 .mx:hover {
   background-color: #8aaff0;
 }
