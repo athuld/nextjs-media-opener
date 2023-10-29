@@ -209,14 +209,14 @@ export default function Home({ isMobile, data, streamLinks }: any) {
 
 async function getStreamLinks(data: any) {
   const stream_link: string = data.download_link;
-  let VLC_DESKTOP = "vlc://" + data.stream_link;
+  let VLC_DESKTOP = "vlc://" + stream_link;
   let encodedFileName = encodeURIComponent(data.filename);
-  let VLC_ANDROID = `intent:${data.stream_link}#Intent;package=org.videolan.vlc;S.title=${encodedFileName};end;`;
+  let VLC_ANDROID = `intent:${stream_link}#Intent;package=org.videolan.vlc;S.title=${encodedFileName};end;`;
   let MPV_MOBILE =
     stream_link.replace("http", "intent") +
     `#Intent;type=video/any;package=is.xyz.mpv;S.title=${encodedFileName};scheme=http;end;`;
-  let MX_PLAYER = `intent:${data.stream_link}#Intent;package=com.mxtech.videoplayer.ad;S.title=${encodedFileName};end;`;
-  let encodedUrl = Buffer.from(data.stream_link).toString("base64");
+  let MX_PLAYER = `intent:${stream_link}#Intent;package=com.mxtech.videoplayer.ad;S.title=${encodedFileName};S.video=true;end;`;
+  let encodedUrl = Buffer.from(stream_link).toString("base64");
   let MPV_DESKTOP = "mpv://" + encodedUrl;
   let streamLinks = {
     mobile: [
