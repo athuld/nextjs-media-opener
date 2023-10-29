@@ -207,15 +207,29 @@ export default function Home({ isMobile, data, streamLinks }: any) {
   );
 }
 
+function get_mob_stream(
+  encodedFilename: string,
+  packageName: string,
+  stream_link: string
+) {
+  const final_url =
+    stream_link.replace("http", "intent") +
+    `#Intent;type=video/any;package=${packageName};S.title=${encodedFilename};scheme=http;end;`;
+  return final_url;
+}
+
 async function getStreamLinks(data: any) {
   const stream_link: string = data.download_link;
   let VLC_DESKTOP = "vlc://" + stream_link;
   let encodedFileName = encodeURIComponent(data.filename);
-  let VLC_ANDROID = `intent:${stream_link}#Intent;package=org.videolan.vlc;S.title=${encodedFileName};end;`;
-  let MPV_MOBILE =
-    stream_link.replace("http", "intent") +
-    `#Intent;type=video/any;package=is.xyz.mpv;S.title=${encodedFileName};scheme=http;end;`;
-  let MX_PLAYER = `intent:${stream_link}#Intent;package=com.mxtech.videoplayer.ad;S.title=${encodedFileName};S.video=true;end;`;
+  let VLC_ANDROID = get_mob_stream(encodedFileName,"org.videolan.vlc",stream_link)
+  // let VLC_ANDROID = `intent:${stream_link}#Intent;package=org.videolan.vlc;S.title=${encodedFileName};end;`;
+  let MPV_MOBILE = get_mob_stream(encodedFileName,"is.xyz.mpv",stream_link)
+  // let MPV_MOBILE =
+  //   stream_link.replace("http", "intent") +
+  //   `#Intent;type=video/any;package=is.xyz.mpv;S.title=${encodedFileName};scheme=http;end;`;
+  let MX_PLAYER = get_mob_stream(encodedFileName,"com.mxtech.videoplayer.ad",stream_link)
+  // let MX_PLAYER = `intent:${stream_link}#Intent;type=video/any;package=com.mxtech.videoplayer.ad;S.title=${encodedFileName};scheme=http;end;`;
   let encodedUrl = Buffer.from(stream_link).toString("base64");
   let MPV_DESKTOP = "mpv://" + encodedUrl;
   let streamLinks = {
