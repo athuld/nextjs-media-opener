@@ -68,9 +68,7 @@ export default function Home({ isMobile, data, streamLinks }: any) {
       clearTimeout(timeoutId);
       const resData = await res.json();
       if (Object.keys(resData).length != 0) {
-        setStData(resData);
-        handleAlertRemove();
-        setStLinks(await getStreamLinks(resData));
+        window.location.href = `/?id=${resData.hash}`
       } else {
         showNotification(
           `Sorry there is no more ${action} link!`,
