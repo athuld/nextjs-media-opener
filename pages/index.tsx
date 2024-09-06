@@ -6,7 +6,7 @@ import AloneImg from "../public/Alone_Meme.jpg";
 import VLCImg from "../public/VLC_Icon.png";
 import MPVImg from "../public/MPV_Icon.png";
 import MXImg from "../public/MX_Icon.png";
-import NextImg from "../public/NEXT_Icon.png"
+import NextImg from "../public/NEXT_Icon.png";
 import CopyIcon from "../public/copy.svg";
 import DownloadIcon from "../public/download.svg";
 import PreviousIcon from "../public/previous.svg";
@@ -60,8 +60,8 @@ export default function Home({ isMobile, data, streamLinks }: any) {
   };
 
   const getMainImageUrl = () => {
-    return `https://stream-img.athuld.workers.dev/0:/${stData.hash}.jpg`
-  }
+    return `https://stream-img.athuld.workers.dev/0:/${stData.hash}.jpg`;
+  };
 
   const getActionApiData = async (action: string) => {
     const ipAddress = new URL(stData.stream_link).hostname;
@@ -72,7 +72,7 @@ export default function Home({ isMobile, data, streamLinks }: any) {
       clearTimeout(timeoutId);
       const resData = await res.json();
       if (Object.keys(resData).length != 0) {
-        window.location.href = `/?id=${resData.hash}`
+        window.location.href = `/?id=${resData.hash}`;
       } else {
         showNotification(
           `Sorry there is no more ${action} link!`,
@@ -116,94 +116,102 @@ export default function Home({ isMobile, data, streamLinks }: any) {
             </div>
           ) : (
             <div className={styles.content_main}>
-              {
-                stData.has_thumb === '1' ? (
-                  <div className={styles.img_main}>
-                    <Image width={100} height={100} sizes="100vw" src={getMainImageUrl()} alt="Main Image" />
-                    <p className={styles.title}>{stData.filename}</p>
-                  </div>
-                ) : null
-              }
-              <div className={styles.content_details}>
-              {
-                stData.has_thumb === '0' ? (
+              {stData.has_thumb === "1" ? (
+                <div className={styles.img_main}>
+                  <Image
+                    width={100}
+                    height={100}
+                    sizes="100vw"
+                    placeholder="blur"
+                    blurDataURL={`${process.env.BLUR_URL}`}
+                    src={getMainImageUrl()}
+                    alt="Main Image"
+                  />
                   <p className={styles.title}>{stData.filename}</p>
-                ) : null
-              }
-              <div className={styles.action_section}>
-                <input
-                  type="text"
-                  className={styles.copy_input}
-                  defaultValue={stData.cloudflare_link}
-                  name="copy"
-                  id="copy"
-                />
-                <a
-                  id="copy_btn"
-                  className={styles.action_btn}
-                  onClick={handleCopyClick}
-                >
-                  <Image src={CopyIcon} className={styles.svg_btn} alt="Copy" />
-                </a>
-                <a
-                  className={styles.action_btn}
-                  target="_blank"
-                  href={stData.download_link}
-                  download={stData.filename}
-                >
-                  <Image
-                    src={DownloadIcon}
-                    className={styles.svg_btn}
-                    alt="Download"
+                </div>
+              ) : null}
+              <div className={styles.content_details}>
+                {stData.has_thumb === "0" ? (
+                  <p className={styles.title}>{stData.filename}</p>
+                ) : null}
+                <div className={styles.action_section}>
+                  <input
+                    type="text"
+                    className={styles.copy_input}
+                    defaultValue={stData.cloudflare_link}
+                    name="copy"
+                    id="copy"
                   />
-                </a>
-              </div>
-              <div className={styles.stream_section}>
-                {stLinks[deviceType]?.map((link: any, index: number) => {
-                  return (
-                    <a key={index} href={link.link} className={link.class}>
-                      <Image
-                        src={link.img}
-                        className={styles.img}
-                        alt="player"
-                      />
-                      <span>{link.app}</span>
-                    </a>
-                  );
-                })}
-              </div>
-              <div className={styles.interactive_section}>
-                <a
-                  onClick={handlePreviousAction}
-                  href=""
-                  className={`${styles.action_btn} ${styles.interactive_btn}`}
-                  target="_blank"
-                >
-                  <Image
-                    className={styles.arrow_btn}
-                    src={PreviousIcon}
-                    alt="Previous"
-                  />
-                  {!isMobile ? (
-                    <span className={styles.action_btn_text}>Previous</span>
-                  ) : null}
-                </a>
-                <a
-                  href=""
-                  onClick={handleNextAction}
-                  className={`${styles.action_btn} ${styles.interactive_btn}`}
-                  target="_blank"
-                >
-                  {!isMobile ? (
-                    <span className={styles.action_btn_text}>Next</span>
-                  ) : null}
-                  <Image
-                    className={styles.arrow_btn}
-                    src={NextIcon}
-                    alt="Next"
-                  />
-                </a>
-              </div>
+                  <a
+                    id="copy_btn"
+                    className={styles.action_btn}
+                    onClick={handleCopyClick}
+                  >
+                    <Image
+                      src={CopyIcon}
+                      className={styles.svg_btn}
+                      alt="Copy"
+                    />
+                  </a>
+                  <a
+                    className={styles.action_btn}
+                    target="_blank"
+                    href={stData.download_link}
+                    download={stData.filename}
+                  >
+                    <Image
+                      src={DownloadIcon}
+                      className={styles.svg_btn}
+                      alt="Download"
+                    />
+                  </a>
+                </div>
+                <div className={styles.stream_section}>
+                  {stLinks[deviceType]?.map((link: any, index: number) => {
+                    return (
+                      <a key={index} href={link.link} className={link.class}>
+                        <Image
+                          src={link.img}
+                          className={styles.img}
+                          alt="player"
+                        />
+                        <span>{link.app}</span>
+                      </a>
+                    );
+                  })}
+                </div>
+                <div className={styles.interactive_section}>
+                  <a
+                    onClick={handlePreviousAction}
+                    href=""
+                    className={`${styles.action_btn} ${styles.interactive_btn}`}
+                    target="_blank"
+                  >
+                    <Image
+                      className={styles.arrow_btn}
+                      src={PreviousIcon}
+                      alt="Previous"
+                    />
+                    {!isMobile ? (
+                      <span className={styles.action_btn_text}>Previous</span>
+                    ) : null}
+                  </a>
+                  <a
+                    href=""
+                    onClick={handleNextAction}
+                    className={`${styles.action_btn} ${styles.interactive_btn}`}
+                    target="_blank"
+                  >
+                    {!isMobile ? (
+                      <span className={styles.action_btn_text}>Next</span>
+                    ) : null}
+                    <Image
+                      className={styles.arrow_btn}
+                      src={NextIcon}
+                      alt="Next"
+                    />
+                  </a>
+                </div>
               </div>
             </div>
           )}
@@ -228,10 +236,22 @@ async function getStreamLinks(data: any) {
   const stream_link: string = data.download_link;
   let VLC_DESKTOP = "vlc://" + stream_link;
   let encodedFileName = encodeURIComponent(data.filename);
-  let VLC_ANDROID = get_mob_stream(encodedFileName,"org.videolan.vlc",stream_link)
-  let MPV_MOBILE = get_mob_stream(encodedFileName,"is.xyz.mpv",stream_link)
-  let MX_PLAYER = get_mob_stream(encodedFileName,"com.mxtech.videoplayer.ad",stream_link)
-  let NEXT_PLAYER = get_mob_stream(encodedFileName,"dev.anilbeesetti.nextplayer",stream_link)
+  let VLC_ANDROID = get_mob_stream(
+    encodedFileName,
+    "org.videolan.vlc",
+    stream_link
+  );
+  let MPV_MOBILE = get_mob_stream(encodedFileName, "is.xyz.mpv", stream_link);
+  let MX_PLAYER = get_mob_stream(
+    encodedFileName,
+    "com.mxtech.videoplayer.ad",
+    stream_link
+  );
+  let NEXT_PLAYER = get_mob_stream(
+    encodedFileName,
+    "dev.anilbeesetti.nextplayer",
+    stream_link
+  );
   let encodedUrl = Buffer.from(stream_link).toString("base64");
   let MPV_DESKTOP = "mpv://" + encodedUrl;
   let streamLinks = {

@@ -41,16 +41,20 @@
   height: 100%;
 }
 
+.main {
+  display: grid;
+  place-items: center;
+  height: 100vh;
+}
+
 .card {
   background-color: #303030;
   min-width: 55vw;
   max-width: 60vw;
   min-height: 400px;
-  max-height: 75vh;
   border-radius: 0.5em;
   padding: 2.5em 1.5em;
   word-break: break-all;
-  margin-top: 1rem;
 }
 
 .card > p {
@@ -224,11 +228,13 @@
 }
 .img_main > p{
   margin-bottom: 0;
+  font-size: 1.2rem;
 }
 
 .img_main > img{
   width: 40vw;
   height: auto;
+  max-height: 38vh;
   border-radius: 0.5em;
 }
 
@@ -240,8 +246,13 @@
   }
 
 .img_main > img{
-  width: 70vw;
+  width: 100%;
   height: auto;
+  max-height: 25vh;
+}
+
+.img_main > p{
+  font-size: 1rem;
 }
 .content_main {
   display: flex;
