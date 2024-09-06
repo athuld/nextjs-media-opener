@@ -59,6 +59,10 @@ export default function Home({ isMobile, data, streamLinks }: any) {
     alert?.classList.remove(styles.error_alert);
   };
 
+  const getMainImageUrl = () => {
+    return `https://stream-img.athuld.workers.dev/0:/${stData.hash}.jpg`
+  }
+
   const getActionApiData = async (action: string) => {
     const ipAddress = new URL(stData.stream_link).hostname;
     try {
@@ -111,8 +115,21 @@ export default function Home({ isMobile, data, streamLinks }: any) {
               <Image src={AloneImg} alt="Alone" />
             </div>
           ) : (
-            <>
-              <p className={styles.title}>{stData.filename}</p>
+            <div className={styles.content_main}>
+              {
+                stData.has_thumb === '1' ? (
+                  <div className={styles.img_main}>
+                    <Image width={100} height={100} sizes="100vw" src={getMainImageUrl()} alt="Main Image" />
+                    <p className={styles.title}>{stData.filename}</p>
+                  </div>
+                ) : null
+              }
+              <div className={styles.content_details}>
+              {
+                stData.has_thumb === '0' ? (
+                  <p className={styles.title}>{stData.filename}</p>
+                ) : null
+              }
               <div className={styles.action_section}>
                 <input
                   type="text"
@@ -127,14 +144,6 @@ export default function Home({ isMobile, data, streamLinks }: any) {
                   onClick={handleCopyClick}
                 >
                   <Image src={CopyIcon} className={styles.svg_btn} alt="Copy" />
-                  {!isMobile ? (
-                    <span
-                      id="copy_icon_text"
-                      className={styles.action_btn_text}
-                    >
-                      Copy
-                    </span>
-                  ) : null}
                 </a>
                 <a
                   className={styles.action_btn}
@@ -147,9 +156,6 @@ export default function Home({ isMobile, data, streamLinks }: any) {
                     className={styles.svg_btn}
                     alt="Download"
                   />
-                  {!isMobile ? (
-                    <span className={styles.action_btn_text}>Download</span>
-                  ) : null}
                 </a>
               </div>
               <div className={styles.stream_section}>
@@ -198,7 +204,8 @@ export default function Home({ isMobile, data, streamLinks }: any) {
                   />
                 </a>
               </div>
-            </>
+              </div>
+            </div>
           )}
         </div>
       </main>
@@ -292,6 +299,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   const res = await fetch(`${process.env.API_URL}/file?hash=${id}`);
   const data = await res.json();
+  console.log(data);
   if (Object.keys(data).length === 0) {
     return {
       props: {

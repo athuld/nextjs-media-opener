@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
+  images: {
+    domains: ['stream-img.athuld.workers.dev'],
+  },
   async headers() {
       return [
         {
