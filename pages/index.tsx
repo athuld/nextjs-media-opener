@@ -141,7 +141,7 @@ export default function Home({ isMobile, data, streamLinks,cfLink }: any) {
                 </div>
               ) : null}
               <div className={styles.content_details}>
-                {stData.has_thumb === 0 ? (
+                {stData.has_thumb != 1 ? (
                   <p className={styles.title}>{stData.filename}</p>
                 ) : null}
                 <div className={styles.action_section}>
