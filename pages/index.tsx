@@ -15,12 +15,14 @@ import React, { useState } from "react";
 import { useRouter } from 'next/router'
 
 
-export default function Home({ isMobile, data, streamLinks }: any) {
+export default function Home({ isMobile, data, streamLinks,cfLink }: any) {
   let deviceType = isMobile ? "mobile" : "desktop";
   const [stData, setStData] = useState(data);
+  const [dlLink, setDlLink] = useState(cfLink)
   const [stLinks, setStLinks] = useState(streamLinks);
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>();
   const router = useRouter()
+  const cf_link = process.env.CLOUDFLARE_LINK || "https://stream.athuld.workers.dev";
 
   const showNotification = (message: string, btnClass: string) => {
     let alert = document.getElementById("alert");
@@ -43,7 +45,7 @@ export default function Home({ isMobile, data, streamLinks }: any) {
   };
 
   const handleCopyClick = () => {
-    let text = data.cloudflare_link;
+    let text = getDownloadURL();
     try {
       navigator.clipboard.writeText(text);
       showNotification("Link copied to clipboard!", styles.copy_alert);
@@ -74,6 +76,7 @@ export default function Home({ isMobile, data, streamLinks }: any) {
         setStData(resData);
         handleAlertRemove();
         setStLinks(await getStreamLinks(resData));
+        setDlLink(`${process.env.CLOUDFLARE_LINK||'https://stream.athuld.workers.dev'}/${resData.hash}`)
         router.push(`/?id=${resData.hash}`,undefined,{shallow:true})
       } else {
         showNotification(
@@ -94,6 +97,11 @@ export default function Home({ isMobile, data, streamLinks }: any) {
   const handlePreviousAction = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
     await getActionApiData("previous");
+  };
+
+  const getDownloadURL = () => {
+    // return `/${stData.hash}`
+    return dlLink
   };
 
   return (
@@ -118,7 +126,7 @@ export default function Home({ isMobile, data, streamLinks }: any) {
             </div>
           ) : (
             <div className={styles.content_main}>
-              {stData.has_thumb === "1" && stData.thumb_url != "" ? (
+              {stData.has_thumb === 1 && stData.thumb_url != "" ? (
                 <div className={styles.img_main}>
                   <Image
                     width={100}
@@ -133,14 +141,14 @@ export default function Home({ isMobile, data, streamLinks }: any) {
                 </div>
               ) : null}
               <div className={styles.content_details}>
-                {stData.has_thumb === "0" ? (
+                {stData.has_thumb === 0 ? (
                   <p className={styles.title}>{stData.filename}</p>
                 ) : null}
                 <div className={styles.action_section}>
                   <input
                     type="text"
                     className={styles.copy_input}
-                    defaultValue={`${process.env.CLOUDFLARE_LINK}/${stData.hash}`}
+                    defaultValue={getDownloadURL()}
                     name="copy"
                     id="copy"
                   />
@@ -158,7 +166,7 @@ export default function Home({ isMobile, data, streamLinks }: any) {
                   <a
                     className={styles.action_btn}
                     target="_blank"
-                    href={`${process.env.CLOUDFLARE_LINK}/${stData.hash}`}
+                    href={getDownloadURL()}
                     download={stData.filename}
                   >
                     <Image
@@ -330,11 +338,13 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     };
   }
   const streamLinks = await getStreamLinks(data);
+  let cfLink = `${process.env.CLOUDFLARE_LINK}/${data.hash}`
   return {
     props: {
       isMobile,
       data,
       streamLinks,
+      cfLink
     },
   };
 }
