@@ -245,6 +245,10 @@
     font-size: 0.8rem;
   }
 
+.main {
+  height: 95vh;
+}
+
 .img_main > img{
   width: 100%;
   height: auto;

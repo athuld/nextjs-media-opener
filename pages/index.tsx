@@ -12,12 +12,15 @@ import DownloadIcon from "../public/download.svg";
 import PreviousIcon from "../public/previous.svg";
 import NextIcon from "../public/next.svg";
 import React, { useState } from "react";
+import { useRouter } from 'next/router'
+
 
 export default function Home({ isMobile, data, streamLinks }: any) {
   let deviceType = isMobile ? "mobile" : "desktop";
   const [stData, setStData] = useState(data);
   const [stLinks, setStLinks] = useState(streamLinks);
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>();
+  const router = useRouter()
 
   const showNotification = (message: string, btnClass: string) => {
     let alert = document.getElementById("alert");
@@ -59,10 +62,6 @@ export default function Home({ isMobile, data, streamLinks }: any) {
     alert?.classList.remove(styles.error_alert);
   };
 
-  const getMainImageUrl = () => {
-    return `https://stream-img.athuld.workers.dev/0:/${stData.hash}.jpg`;
-  };
-
   const getActionApiData = async (action: string) => {
     const ipAddress = new URL(stData.stream_link).hostname;
     try {
@@ -72,7 +71,10 @@ export default function Home({ isMobile, data, streamLinks }: any) {
       clearTimeout(timeoutId);
       const resData = await res.json();
       if (Object.keys(resData).length != 0) {
-        window.location.href = `/?id=${resData.hash}`;
+        setStData(resData);
+        handleAlertRemove();
+        setStLinks(await getStreamLinks(resData));
+        router.push(`/?id=${resData.hash}`,undefined,{shallow:true})
       } else {
         showNotification(
           `Sorry there is no more ${action} link!`,
@@ -116,7 +118,7 @@ export default function Home({ isMobile, data, streamLinks }: any) {
             </div>
           ) : (
             <div className={styles.content_main}>
-              {stData.has_thumb === "1" ? (
+              {stData.has_thumb === "1" && stData.thumb_url != "" ? (
                 <div className={styles.img_main}>
                   <Image
                     width={100}
@@ -124,7 +126,7 @@ export default function Home({ isMobile, data, streamLinks }: any) {
                     sizes="100vw"
                     placeholder="blur"
                     blurDataURL={`${process.env.BLUR_URL}`}
-                    src={getMainImageUrl()}
+                    src={stData.thumb_url}
                     alt="Main Image"
                   />
                   <p className={styles.title}>{stData.filename}</p>
@@ -138,7 +140,7 @@ export default function Home({ isMobile, data, streamLinks }: any) {
                   <input
                     type="text"
                     className={styles.copy_input}
-                    defaultValue={stData.cloudflare_link}
+                    defaultValue={`${process.env.CLOUDFLARE_LINK}/${stData.hash}`}
                     name="copy"
                     id="copy"
                   />
@@ -156,7 +158,7 @@ export default function Home({ isMobile, data, streamLinks }: any) {
                   <a
                     className={styles.action_btn}
                     target="_blank"
-                    href={stData.download_link}
+                    href={`${process.env.CLOUDFLARE_LINK}/${stData.hash}`}
                     download={stData.filename}
                   >
                     <Image
@@ -319,7 +321,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   const res = await fetch(`${process.env.API_URL}/file?hash=${id}`);
   const data = await res.json();
-  console.log(data);
   if (Object.keys(data).length === 0) {
     return {
       props: {
@@ -328,7 +329,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     };
   }
-  data["cloudflare_link"] = `${process.env.CLOUDFLARE_LINK}/${id}`;
   const streamLinks = await getStreamLinks(data);
   return {
     props: {
