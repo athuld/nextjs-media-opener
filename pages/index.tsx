@@ -5,6 +5,7 @@ import Image from "next/image";
 import AloneImg from "../public/Alone_Meme.jpg";
 import VLCImg from "../public/VLC_Icon.png";
 import MPVImg from "../public/MPV_Icon.png";
+import MPVKTIcon from "../public/MPVKT_Icon.svg";
 import MXImg from "../public/MX_Icon.png";
 import NextImg from "../public/NEXT_Icon.png";
 import CopyIcon from "../public/copy.svg";
@@ -252,6 +253,7 @@ async function getStreamLinks(data: any) {
     stream_link
   );
   let MPV_MOBILE = get_mob_stream(encodedFileName, "is.xyz.mpv", stream_link);
+  let MPVKT_PLAYER = get_mob_stream(encodedFileName, "live.mehiz.mpvkt", stream_link);
   let MX_PLAYER = get_mob_stream(
     encodedFileName,
     "com.mxtech.videoplayer.ad",
@@ -273,9 +275,9 @@ async function getStreamLinks(data: any) {
         class: `${styles.player} ${styles.vlc}`,
       },
       {
-        app: "Mpv Mobile",
-        link: MPV_MOBILE,
-        img: MPVImg,
+        app: "mpvKt Player",
+        link: MPVKT_PLAYER,
+        img: MPVKTIcon,
         class: `${styles.player} ${styles.mpv}`,
       },
       {
