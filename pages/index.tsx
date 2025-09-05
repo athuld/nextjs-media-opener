@@ -329,7 +329,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     };
   }
 
-  const res = await fetch(`${process.env.API_URL}/file?hash=${id}`);
+  const res = await fetch(`${process.env.API_URL}/file?hash=${id}&ref_secret=${process.env.REF_SECRET}`);
   const data = await res.json();
   if (Object.keys(data).length === 0) {
     return {
