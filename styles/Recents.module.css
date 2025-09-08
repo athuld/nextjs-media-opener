@@ -1,0 +1,95 @@
+.main_title{
+    padding: 1rem;
+    color: white;
+}
+
+.sort_select{
+    margin: 1rem;
+    padding: 0.5em 2em 0.5em 0.5em;
+    background: white;
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAu0lEQVR4nO3TOw7CQAxF0REFgt1SZl8UgdVdRDFFUKL85vMs3q1d+MhySs4555xzrlnAJUXfEbgCT2BIogEP4AXc1xC5QRSRe89iZiBSGKaIDLktDUti2INQxXAEoYbhDEIFQwlEbwwlEb0w1EC0xlAT0QrTBFEb0xRRC9MFURrTFVEKI4E4i5FCHMVIIvZipBFbMSEQa5hQiNx3QWBkuVEesXKZGJfYgImHmMHERfz8TGyEc84559yf9wHuTMZDTyjzxgAAAABJRU5ErkJggg==");
+    background-size: 1rem;
+    background-repeat: no-repeat;
+    background-position: right 0.6rem center;
+    appearance: none;
+    border-radius: 0.5em;
+    font-weight: 600;
+    background-color: #303030;
+    color:white;
+}
+
+.main_container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:center;
+    align-items:center;
+}
+
+.main_container h1 {
+    color:white;
+}
+
+.item_card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    width: 90vw;
+    padding: 1rem;
+    background-color: #303030;
+    margin: 0.5em;
+    border-radius:0.5em;
+    box-shadow: 0 4px 4px #303020;
+}
+
+.item_card img{
+    width: 100%;
+    border-radius:0.5em;
+    height: auto;
+}
+
+.item_card a {
+    text-decoration: none;
+}
+
+.item_card h5{
+    color:white;
+    margin: 0;
+}
+
+.player_link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+  color: #121313;
+  padding: 0.5em 0.8em;
+  border-radius: 0.5em;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.8rem;
+  color: #303030;
+  transition: all 0.3s ease;
+  background-color: #e9c8f6;
+}
+
+.player_link img{
+    width: 1.5rem;
+}
+
+.meta_container{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.meta_container span {
+    color: white;
+    padding: 0.2em 1em;
+    font-size: 0.8em;
+    border-radius: 0.5em;
+    background-color: #5d5d7d;
+}
+
+.meta_container span:nth-child(2){
+    background-color: #477147;
+}
