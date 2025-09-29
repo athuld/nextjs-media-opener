@@ -265,7 +265,7 @@ async function getStreamLinks(data: any) {
     stream_link
   );
   let encodedUrl = Buffer.from(stream_link).toString("base64");
-  let MPV_DESKTOP = "mpv://" + encodedUrl;
+  let MPV_DESKTOP = "mpv://play/" + encodedUrl.replace(/\//g, "_").replace(/\+/g, "-").replace(/\=/g, "");
   let streamLinks = {
     mobile: [
       {
