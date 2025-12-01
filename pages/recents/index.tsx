@@ -1,22 +1,9 @@
 import { GetServerSidePropsContext } from "next";
 import Head from "next/head";
-import Image from "next/image";
-import { get_mob_stream } from "../../utils/helpers";
-import MPVKTIcon from "../../public/MPVKT_Icon.svg";
 import styles from "../../styles/Recents.module.css";
 import React, { useState } from "react";
-
-interface RecentSearchData {
-  hash: string;
-  filename: string;
-  stream_link: string;
-  download_link: string;
-  has_thumb: number;
-  thumb_url: string;
-  created_at: string;
-  updated_at: string;
-  search_frequency: number;
-}
+import RecentSearchData from "../../types/IRecentSeachData";
+import RecentCard from "./_components/RecentCard";
 
 export default function Recents({
   isMobile,
@@ -43,20 +30,21 @@ export default function Recents({
     }
   }
 
-  const getMpvData = (data: RecentSearchData) => {
-    let encodedFileName = encodeURIComponent(data.filename);
-    let MPVKT_PLAYER = get_mob_stream(
-      encodedFileName,
-      "live.mehiz.mpvkt",
-      data.download_link,
+  const handleLoadClick = async () => {
+    const currentLength = searchData.length;
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/recent/search?ref_secret=${process.env.NEXT_PUBLIC_REF_SECRET}&page=${Math.floor(currentLength / 10) + 1}`,
     );
-    let mpvData = {
-      app: "mpvKt Player",
-      link: MPVKT_PLAYER,
-      img: MPVKTIcon,
-    };
-    return mpvData;
-  };
+    const newData: RecentSearchData[] = await res.json();
+    if (res.status === 200 && newData.length > 0) {
+      setSearchData([...searchData, ...newData]);
+    }else{
+        const button = document.querySelector(".load_more_btn") as HTMLButtonElement;
+        button.disabled = true;
+        button.innerText = "No more data";
+    }
+  }
+
   return (
     <>
       <Head>
@@ -77,37 +65,13 @@ export default function Recents({
       ) : null}
       <div className={styles.main_container}>
         {searchData && searchData.length > 0 ? (
-          searchData.map((item) => (
-            <div key={item.hash} className={styles.item_card}>
-              <Image
-                height={100}
-                width={100}
-                placeholder="blur"
-                blurDataURL={`${process.env.BLUR_URL}`}
-                src={item.thumb_url}
-                alt="Image"
-              />
-              <a href={"/?id=" + item.hash}>
-                <h5>{item.filename}</h5>
-              </a>
-              <div className={styles.meta_container}>
-                <span>
-                  Updated:{" "}
-                  {new Date(item.updated_at).toLocaleDateString("en-GB", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric",
-                  })}
-                </span>
-                <span>Searched: {item.search_frequency}</span>
-              </div>
-              <a href={getMpvData(item).link} className={styles.player_link}>
-                <Image src={getMpvData(item).img} alt="player" />
-                <span>{getMpvData(item).app}</span>
-              </a>
-            </div>
-          ))
-        ) : (
+        <>
+        {searchData.map((item) => (
+              <RecentCard {...item} />
+          ))}
+          <button onClick={()=>handleLoadClick()} className={styles.load_more_btn}>Load more</button>
+        </>
+        ): (
           <h1>No Recent Searches</h1>
         )}
       </div>
@@ -134,7 +98,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 
   const res = await fetch(
-    `${process.env.API_URL}/recent/search?ref_secret=${process.env.REF_SECRET}`,
+    `${process.env.API_URL}/recent/search?ref_secret=${process.env.REF_SECRET}&page=1`,
   );
   const data: RecentSearchData[] = await res.json();
   if (

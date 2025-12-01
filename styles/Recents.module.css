@@ -93,3 +93,16 @@
 .meta_container span:nth-child(2){
     background-color: #477147;
 }
+
+.load_more_btn {
+    padding: 0.5em 1em;
+    width: 100%;
+    margin: 1.6rem;
+    border-radius: 0.5em;
+    border: none;
+    background-color:#303030 ;
+    color: #ffff;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
