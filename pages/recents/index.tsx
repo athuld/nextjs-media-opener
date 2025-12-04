@@ -15,33 +15,42 @@ export default function Recents({
   uuid?: string;
 }) {
 
-  const [searchData, setSearchData] = useState(data)
+  const SORT_OPTIONS = {LATEST: "latest", OLDEST: "oldest", SEARCHED: "searched"}
 
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const [searchData, setSearchData] = useState(data)
+  const [sortOption, setSortOption] = useState("latest");
+
+  const handleSelectChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
-    let sortedData = [...searchData];
-    if (value === "latest") {
-      sortedData.sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
-      setSearchData(sortedData);
-    } else if (value === "oldest") {
-      sortedData.sort((a, b) => new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime());
-      setSearchData(sortedData);
-    } else if (value === "searched") {
-      sortedData.sort((a, b) => b.search_frequency - a.search_frequency);
-      setSearchData(sortedData);
-    }
+
+    if (value === SORT_OPTIONS.LATEST && sortOption === SORT_OPTIONS.LATEST) return;
+    if (value === SORT_OPTIONS.OLDEST && sortOption === SORT_OPTIONS.OLDEST) return;
+    if (value === SORT_OPTIONS.SEARCHED && sortOption === SORT_OPTIONS.SEARCHED) return;
+
+    setSortOption(value);
+    const res = await fetch(
+      `/api/pagination?uuid=${uuid}&page=1&sort=${value}`,
+    );
+
+    const newData: RecentSearchData[] = await res.json();
+    if (res.status !== 200 || newData.length === 0) return;
+    setSearchData(newData);
   }
 
   const handleLoadClick = async () => {
+    const button = document.getElementById("load-more-btn") as HTMLButtonElement;
+    button.disabled = true;
+    button.innerText = "Fetching...";
     const currentLength = searchData.length;
     const res = await fetch(
-      `/api/pagination?uuid=${uuid}&page=${Math.floor(currentLength / 10) + 1}`,
+      `/api/pagination?uuid=${uuid}&page=${Math.floor(currentLength / 10) + 1}&sort=${sortOption}`,
     );
     const newData: RecentSearchData[] = await res.json();
     if (res.status === 200 && newData.length > 0) {
       setSearchData([...searchData, ...newData]);
+      button.disabled = false;
+      button.innerText = "Load more";
     }else{
-        const button = document.querySelector(".load_more_btn") as HTMLButtonElement;
         button.disabled = true;
         button.innerText = "No more data";
     }
@@ -71,7 +80,7 @@ export default function Recents({
         {searchData.map((item) => (
               <RecentCard key={item.hash} {...item} />
           ))}
-          <button onClick={()=>handleLoadClick()} className={styles.load_more_btn}>Load more</button>
+          <button onClick={()=>handleLoadClick()} id="load-more-btn" className={styles.load_more_btn}>Load more</button>
         </>
         ): (
           <h1>No Recent Searches</h1>
