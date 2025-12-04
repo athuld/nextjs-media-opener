@@ -1,11 +1,11 @@
 import Image from "next/image";
-import styles from "../../../styles/Recents.module.css";
-import RecentSearchData from "../../../types/IRecentSeachData";
-import { getMpvData } from "../../../utils/helpers";
+import styles from "../styles/Recents.module.css";
+import RecentSearchData from "../types/IRecentSeachData";
+import { getMpvData } from "../utils/helpers";
 
 export default function RecentCard(item: RecentSearchData) {
   return (
-    <div key={item.hash} className={styles.item_card}>
+    <div className={styles.item_card}>
       <Image
         height={100}
         width={100}

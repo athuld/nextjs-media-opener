@@ -3,14 +3,16 @@ import Head from "next/head";
 import styles from "../../styles/Recents.module.css";
 import React, { useState } from "react";
 import RecentSearchData from "../../types/IRecentSeachData";
-import RecentCard from "./_components/RecentCard";
+import RecentCard from "../../components/RecentCard";
 
 export default function Recents({
   isMobile,
   data,
+  uuid,
 }: {
   isMobile: boolean;
   data: RecentSearchData[];
+  uuid?: string;
 }) {
 
   const [searchData, setSearchData] = useState(data)
@@ -33,7 +35,7 @@ export default function Recents({
   const handleLoadClick = async () => {
     const currentLength = searchData.length;
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/recent/search?ref_secret=${process.env.NEXT_PUBLIC_REF_SECRET}&page=${Math.floor(currentLength / 10) + 1}`,
+      `/api/pagination?uuid=${uuid}&page=${Math.floor(currentLength / 10) + 1}`,
     );
     const newData: RecentSearchData[] = await res.json();
     if (res.status === 200 && newData.length > 0) {
@@ -67,7 +69,7 @@ export default function Recents({
         {searchData && searchData.length > 0 ? (
         <>
         {searchData.map((item) => (
-              <RecentCard {...item} />
+              <RecentCard key={item.hash} {...item} />
           ))}
           <button onClick={()=>handleLoadClick()} className={styles.load_more_btn}>Load more</button>
         </>
@@ -93,6 +95,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       props: {
         isMobile,
         data: [],
+        uuid
       },
     };
   }
@@ -109,6 +112,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       props: {
         isMobile,
         data: [],
+        uuid
       },
     };
   }
@@ -121,6 +125,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     props: {
       isMobile,
       data,
+      uuid
     },
   };
 }
