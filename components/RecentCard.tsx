@@ -6,14 +6,16 @@ import { getMpvData } from "../utils/helpers";
 export default function RecentCard(item: RecentSearchData) {
   return (
     <div className={styles.item_card}>
-      <Image
-        height={100}
-        width={100}
-        placeholder="blur"
-        blurDataURL={`${process.env.BLUR_URL}`}
-        src={item.thumb_url}
-        alt="Image"
-      />
+      <a href={"/?id=" + item.hash}>
+        <Image
+          height={100}
+          width={100}
+          placeholder="blur"
+          blurDataURL={`${process.env.BLUR_URL}`}
+          src={item.thumb_url}
+          alt="Image"
+        />
+      </a>
       <a href={"/?id=" + item.hash}>
         <h5>{item.filename}</h5>
       </a>
@@ -29,7 +31,7 @@ export default function RecentCard(item: RecentSearchData) {
         <span>Searched: {item.search_frequency}</span>
       </div>
       <a href={getMpvData(item).link} className={styles.player_link}>
-        <Image src={getMpvData(item).img} alt="player" />
+        <Image className={styles.mpvImg} src={getMpvData(item).img} alt="player" />
         <span>{getMpvData(item).app}</span>
       </a>
     </div>

@@ -1,5 +1,5 @@
 import RecentSearchData  from "../types/IRecentSeachData";
-import MPVKTIcon from "../public/MPVKT_Icon.svg";
+import MPVExIcon from "../public/mpvExtended.png";
 
 export function get_mob_stream(
   encodedFilename: string,
@@ -14,15 +14,15 @@ export function get_mob_stream(
 
 export const getMpvData = (data: RecentSearchData) => {
   let encodedFileName = encodeURIComponent(data.filename);
-  let MPVKT_PLAYER = get_mob_stream(
+  let MPVEx_PLAYER = get_mob_stream(
     encodedFileName,
-    "live.mehiz.mpvkt",
+    "app.marlboroadvance.mpvex",
     data.download_link,
   );
   let mpvData = {
-    app: "mpvKt Player",
-    link: MPVKT_PLAYER,
-    img: MPVKTIcon,
+    app: "mpvEx Player",
+    link: MPVEx_PLAYER,
+    img: MPVExIcon,
   };
   return mpvData;
 };

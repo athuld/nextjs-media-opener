@@ -160,6 +160,10 @@
   background-color: #e9c8f6;
 }
 
+.mpv img{
+    border-radius: 0.2em;
+}
+
 .vlc {
   background-color: #fcbc7c;
 }
