@@ -1,4 +1,4 @@
-import RecentSearchData  from "../types/IRecentSeachData";
+import RecentSearchData from "../types/IRecentSeachData";
 import MPVExIcon from "../public/mpvExtended.png";
 
 export function get_mob_stream(
@@ -17,7 +17,7 @@ export const getMpvData = (data: RecentSearchData) => {
   let MPVEx_PLAYER = get_mob_stream(
     encodedFileName,
     "app.marlboroadvance.mpvex",
-    data.download_link,
+    get_stream_link(data.stream_link) || data.stream_link,
   );
   let mpvData = {
     app: "mpvEx Player",
@@ -26,3 +26,11 @@ export const getMpvData = (data: RecentSearchData) => {
   };
   return mpvData;
 };
+
+export function get_stream_link(link: string) {
+  if (process.env.NEXT_PUBLIC_STREAM_PORT) {
+    const url = new URL(link);
+    url.port = process.env.NEXT_PUBLIC_STREAM_PORT;
+    return url.toString();
+  }
+}

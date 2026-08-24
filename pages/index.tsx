@@ -14,6 +14,7 @@ import PreviousIcon from "../public/previous.svg";
 import NextIcon from "../public/next.svg";
 import React, { useState } from "react";
 import { useRouter } from 'next/router'
+import { get_stream_link } from "@/utils/helpers";
 
 
 export default function Home({ isMobile, data, streamLinks,cfLink }: any) {
@@ -244,7 +245,7 @@ function get_mob_stream(
 }
 
 async function getStreamLinks(data: any) {
-  const stream_link: string = data.download_link;
+  const stream_link: string = get_stream_link(data.download_link) || data.download_link;
   let VLC_DESKTOP = "vlc://" + stream_link;
   let encodedFileName = encodeURIComponent(data.filename);
   let VLC_ANDROID = get_mob_stream(
